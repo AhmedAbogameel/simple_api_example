@@ -8,6 +8,11 @@ class CounterController extends Cubit<CounterStates>{
 
   int counter = 0;
 
+  String getData() {
+    print('Data ' * 88);
+    return 'data';
+  }
+
   void add(){
     counter++;
     emit(CounterRebuild());
