@@ -1,25 +1,43 @@
-import 'dart:convert';
-
-import 'package:api/core/sharedHelper/shared_helper.dart';
+import 'package:api/core/router/router.dart';
+import 'package:api/views/home/view.dart';
+import 'package:api/views/login/states.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class LoginController {
+class LoginController extends Cubit<LoginStates> {
+  LoginController() : super(LoginInit());
 
-  Future<String> login(String email,String password)async{
+  static LoginController of(context)=> BlocProvider.of(context);
+
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
+  final formKey = GlobalKey<FormState>();
+
+  Future<void> login()async{
+    if(!formKey.currentState.validate()) return;
+    emit(LoginLoading());
     final formData = FormData.fromMap({
-      'email': email,
-      'password': password
+      'email': emailController.text,
+      'password': passwordController.text
     });
-    final response = await Dio().post('',data: formData);
-    final data = response.data as Map;
-    /// NOTE: Success
-    if(data.containsKey('customer_id')){
-      SharedHelper.setId('');
-      return 'ok';
+    try{
+      final response = await Dio().post('',data: formData);
+      final data = response.data as Map;
+      if(data.containsKey('message'))
+        ScaffoldMessenger.of(MagicRouter.currentContext).showSnackBar(
+          SnackBar(content: Text('Error!'))
+        );
+      else
+        MagicRouter.navigateAndPopAll(HomeView());
+    }catch(e, s){
+      print(e);
+      /// Dio Error 500
+      print(s);
+      /// Line 50 file login_view.dart
     }
-    /// NOTE: ERROR
-    else
-      return data['error_warning'];
+    emit(LoginInit());
   }
   /*
   // Map x = {};
