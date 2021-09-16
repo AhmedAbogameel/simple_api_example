@@ -1,5 +1,6 @@
 import 'package:api/core/router/router.dart';
 import 'package:api/core/sharedHelper/shared_helper.dart';
+import 'package:api/views/search/view.dart';
 import 'package:api/views/terms/view.dart';
 import 'package:flutter/material.dart';
 
@@ -15,7 +16,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       navigatorKey: navigatorKey,
       onGenerateRoute: onGenerateRoute,
-      home: TermsView(),
+      home: SearchView(),
     );
   }
 }

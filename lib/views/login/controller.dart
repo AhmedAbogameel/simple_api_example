@@ -32,10 +32,7 @@ class LoginController extends Cubit<LoginStates> {
       else
         MagicRouter.navigateAndPopAll(HomeView());
     }catch(e, s){
-      print(e);
-      /// Dio Error 500
       print(s);
-      /// Line 50 file login_view.dart
     }
     emit(LoginInit());
   }
